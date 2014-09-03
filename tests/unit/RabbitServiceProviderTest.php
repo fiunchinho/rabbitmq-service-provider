@@ -139,7 +139,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testMultiplesConsumersAreRegistered()
     {
-       $app = new Application();
+        $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
             'rabbit.connections' => [
