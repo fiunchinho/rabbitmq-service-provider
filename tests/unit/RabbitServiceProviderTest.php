@@ -38,15 +38,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
-            'rabbit.connections' => [
-                'default' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ]
-            ],
+            'rabbit.connections' => $this->givenSomeValidConnections(),
             'rabbit.producers' => [
                 'a_producer' => [
                     'connection'        => 'default',
@@ -68,22 +60,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
-            'rabbit.connections' => [
-                'default' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ],
-                'another' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ]
-            ],
+            'rabbit.connections' => $this->givenSomeValidConnections(),
             'rabbit.consumers' => [
                 'a_consumer' => [
                     'connection'        => 'default',
@@ -109,22 +86,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
-            'rabbit.connections' => [
-                'default' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ],
-                'another' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ]
-            ],
+            'rabbit.connections' => $this->givenSomeValidConnections(),
             'rabbit.anon_consumers' => [
                 'anoymous' => [
                     'connection'        => 'another',
@@ -142,22 +104,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
-            'rabbit.connections' => [
-                'default' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ],
-                'another' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ]
-            ],
+            'rabbit.connections' => $this->givenSomeValidConnections(),
             'rabbit.multiple_consumers' => [
                 'multiple' => [
                     'connection'        => 'default',
@@ -177,15 +124,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
-            'rabbit.connections' => [
-                'another' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ]
-            ],
+            'rabbit.connections' => $this->givenSomeValidConnections(),
             'rabbit.rpc_clients' => [
                 'a_client' => [
                     'connection'                    => 'another',
@@ -202,15 +141,7 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->register(new RabbitServiceProvider(), [
-            'rabbit.connections' => [
-                'another' => [
-                    'host' => 'localhost',
-                    'port' => 5672,
-                    'user' => 'guest',
-                    'password' => 'guest',
-                    'vhost' => '/'
-                ]
-            ],
+            'rabbit.connections' => $this->givenSomeValidConnections(),
             'rabbit.rpc_servers' => [
                 'a_server' => [
                     'connection'    => 'another',
@@ -221,5 +152,25 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->assertInstanceOf("OldSound\RabbitMqBundle\RabbitMq\RpcServer", $app['rabbit.rpc_server']['a_server']);
+    }
+
+    private function givenSomeValidConnections()
+    {
+        return [
+            'default' => [
+                'host' => 'localhost',
+                'port' => 5672,
+                'user' => 'guest',
+                'password' => 'guest',
+                'vhost' => '/'
+            ],
+            'another' => [
+                'host' => 'localhost',
+                'port' => 5672,
+                'user' => 'guest',
+                'password' => 'guest',
+                'vhost' => '/'
+            ]
+        ];
     }
 }
