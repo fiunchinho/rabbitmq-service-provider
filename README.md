@@ -1,4 +1,4 @@
-# RabbitMqBundle #
+# RabbitMq Servive Provider for Silex #
 
 ## About ##
 
