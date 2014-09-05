@@ -1,4 +1,4 @@
-# RabbitMq Servive Provider for Silex #
+# RabbitMq Service Provider for Silex #
 
 ## About ##
 
