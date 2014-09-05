@@ -101,7 +101,7 @@ $app->register(new RabbitServiceProvider(), [
 
 Keep in mind that the callback that you choose in the consumer needs to be a service that has been registered in the Pimple container. Consumer services implement the ConsumerInterface, which has a execute() public method.
 
-## Commands in the command line
+## Consumers in the command line
 We recommend you to use the Consumer command to consume messages from the queues. To use this command, just create the executable for console (as in any console applicaiton)
 
 ```php
@@ -117,7 +117,16 @@ use Knp\Provider\ConsoleServiceProvider;
 
 $app = new Application();
 require __DIR__.'/config/dev.php';
-$app->register(new RabbitServiceProvider());
+$app->register(new RabbitServiceProvider(), array(
+    'rabbit.consumers' => [
+        'my_consumer' => [
+            'connection'        => 'default',
+            'exchange_options'  => ['name' => 'my_exchange_name','type' => 'topic'],
+            'queue_options'     => ['name' => 'a_queue', 'routing_keys' => ['foo.#']],
+            'callback'          => 'my_service'
+        ]
+    ]
+));
 $app->register(new ConsoleServiceProvider(), array(
     'console.name'              => 'MyApplication',
     'console.version'           => '1.0.0',
@@ -130,7 +139,7 @@ $application->add(new Consumer());
 $application->run();
 ```
 
-We rely on the Knp\Provider\ConsoleServiceProvider to make things easier, so you have to register it too. You can create new commands by inheriting from the example Consumer, and adding them as the example above.
+We rely on the [Knp\Provider\ConsoleServiceProvider](https://github.com/KnpLabs/ConsoleServiceProvider) to make things easier, so you have to register it too. You can create new commands by inheriting from the example Consumer, and adding them as the example above.
 
 
 ## Credits ##
