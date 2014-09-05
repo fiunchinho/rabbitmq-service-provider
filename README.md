@@ -18,7 +18,10 @@ $app->post('/message', function(Request $request) use ($app){
 
 Later when you want to consume 50 messages out of the queue names 'my_queue', you just run on the CLI:
 
+```php
+
 $ ./app/console rabbitmq:consumer -m 50 my_queue
+```
 
 To learn what you can do with the bundle, please read the bundle's [README](https://github.com/videlalvaro/RabbitMqBundle/blob/master/README.md).
 
