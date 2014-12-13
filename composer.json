@@ -15,7 +15,7 @@
         "php": ">=5.4.0",
         "silex/silex": "~1.2",
         "oldsound/rabbitmq-bundle": "~1.5",
-        "knplabs/console-service-provider": "dev-master"
+        "knplabs/console-service-provider": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~3"
