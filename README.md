@@ -27,20 +27,10 @@ To learn what you can do with the bundle, please read the bundle's [README](http
 
 ## Installation ##
 
-Require the library in your composer.json file:
-
-````
-{
-    "require": {
-        "fiunchinho/rabbitmq-service-provider": "1.0.0",
-    }
-}
-```
-
-Tell Composer to fetch the library:
+Require the library with Composer:
 
 ```
-$ composer update fiunchinho/rabbitmq-service-provider
+$ composer require fiunchinho/rabbitmq-service-provider
 ```
 
 Then, to activate the service, register the service provider after creating your Silex Application:
