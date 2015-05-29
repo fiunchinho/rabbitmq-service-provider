@@ -11,13 +11,15 @@
             "homepage": "http://blog.armesto.net"
         }
     ],
-    "require-dev": {
+    "require": {
         "silex/silex": "~2.0@dev",
         "oldsound/rabbitmq-bundle": "~1.5",
         "knplabs/console-service-provider": "~1.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.2"
+    },
     "autoload": {
         "psr-0": { "fiunchinho": "src/" }
-    },
-    "minimum-stability": "dev"
+    }
 }
