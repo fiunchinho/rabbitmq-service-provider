@@ -71,11 +71,13 @@ $app->register(new RabbitServiceProvider(), [
     'rabbit.producers' => [
         'first_producer' => [
             'connection'        => 'another',
-            'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic']
+            'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic'],
+            'queue_options'     => ['name' => 'a_queue', 'routing_keys' => ['foo.#']]
         ],
         'second_producer' => [
             'connection'        => 'default',
             'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic']
+            'queue_options'     => ['name' => 'another_queue', 'routing_keys' => ['foo.#']]
         ],
     ],
     'rabbit.consumers' => [
