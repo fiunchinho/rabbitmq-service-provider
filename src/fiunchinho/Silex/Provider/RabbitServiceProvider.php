@@ -151,7 +151,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
                 $connection = $this->getConnection($app, $options, $app['rabbit.connections']);
                 $consumer = new AnonConsumer($connection);
                 $consumer->setExchangeOptions($options['exchange_options']);
-                $consumer->setCallback(array($options['callback'], 'execute'));
+                $consumer->setCallback(array($app[$options['callback']], 'execute'));
 
                 $consumers[$name] = $consumer;
             }
@@ -166,12 +166,18 @@ class RabbitServiceProvider implements ServiceProviderInterface
             if (!isset($app['rabbit.multiple_consumers'])) {
                 return;
             }
-
             $consumers = [];
             foreach ($app['rabbit.multiple_consumers'] as $name => $options) {
                 $connection = $this->getConnection($app, $options, $app['rabbit.connections']);
                 $consumer = new MultipleConsumer($connection);
                 $consumer->setExchangeOptions($options['exchange_options']);
+
+                foreach ($options['queues'] as &$queue) {
+                    if (isset($queue['callback'])) {
+                        $queue['callback'] = array($app[$queue['callback']], 'execute');
+                    }
+                }
+
                 $consumer->setQueues($options['queues']);
 
                 if (array_key_exists('qos_options', $options)) {
@@ -233,7 +239,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
                 $connection = $this->getConnection($app, $options, $app['rabbit.connections']);
                 $server = new RpcServer($connection);
                 $server->initServer($name);
-                $server->setCallback(array($options['callback'], 'execute'));
+                $server->setCallback(array($app[$options['callback']], 'execute'));
 
                 if (array_key_exists('qos_options', $options)) {
                     $server->setQosOptions(
