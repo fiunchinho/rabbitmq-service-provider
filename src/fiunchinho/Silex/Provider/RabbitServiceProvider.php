@@ -88,6 +88,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
                 $producer = new Producer($connection);
                 $producer->setExchangeOptions($options['exchange_options']);
+                $producer->setQueueOptions($options['queue_options']);
 
                 if ((array_key_exists('auto_setup_fabric', $options)) && (!$options['auto_setup_fabric'])) {
                     $producer->disableAutoSetupFabric();
