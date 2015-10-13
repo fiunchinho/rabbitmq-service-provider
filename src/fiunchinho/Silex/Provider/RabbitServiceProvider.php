@@ -88,6 +88,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
                 $producer = new Producer($connection);
                 $producer->setExchangeOptions($options['exchange_options']);
+		$producer->setQueueOptions($options['queue_options']);
 
                 //this producer doesn't define a queue
                 if (!isset($options['queue_options'])) {
