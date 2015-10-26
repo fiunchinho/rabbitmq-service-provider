@@ -42,11 +42,12 @@ class RabbitServiceProviderTest extends \PHPUnit_Framework_TestCase
             'rabbit.producers' => [
                 'a_producer' => [
                     'connection'        => 'default',
-                    'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic']
+                    'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic'],
+                    'queue_options'  => ['name' => 'a_queue']
                 ],
                 'second_producer' => [
                     'connection'        => 'default',
-                    'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic']
+                    'exchange_options'  => ['name' => 'a_exchange', 'type' => 'topic'],
                 ],
             ]
         ]);

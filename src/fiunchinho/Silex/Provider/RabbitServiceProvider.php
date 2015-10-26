@@ -2,31 +2,32 @@
 
 namespace fiunchinho\Silex\Provider;
 
+use Pimple\ServiceProviderInterface;
+use Pimple\Container;
 use Silex\Application;
-use Silex\ServiceProviderInterface;
-use Symfony\Component\Routing\Generator\UrlGenerator;
+use Silex\Api\BootableProviderInterface;
+
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 use OldSound\RabbitMqBundle\RabbitMq\Consumer;
 use OldSound\RabbitMqBundle\RabbitMq\AnonConsumer;
 use OldSound\RabbitMqBundle\RabbitMq\MultipleConsumer;
 use OldSound\RabbitMqBundle\RabbitMq\RpcClient;
 use OldSound\RabbitMqBundle\RabbitMq\RpcServer;
-use PhpAmqpLib\Connection\AMQPConnection;
 use PhpAmqpLib\Connection\AMQPLazyConnection;
 
-class RabbitServiceProvider implements ServiceProviderInterface
+class RabbitServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
     const DEFAULT_CONNECTION = 'default';
 
-    public function register(Application $app)
+    public function register(Container $container)
     {
-        $this->loadConnections($app);
-        $this->loadProducers($app);
-        $this->loadConsumers($app);
-        $this->loadAnonymousConsumers($app);
-        $this->loadMultipleConsumers($app);
-        $this->loadRpcClients($app);
-        $this->loadRpcServers($app);
+        $this->loadConnections($container);
+        $this->loadProducers($container);
+        $this->loadConsumers($container);
+        $this->loadAnonymousConsumers($container);
+        $this->loadMultipleConsumers($container);
+        $this->loadRpcClients($container);
+        $this->loadRpcServers($container);
     }
 
     public function boot(Application $app)
@@ -53,7 +54,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
     private function loadConnections($app)
     {
-        $app['rabbit.connection'] = $app->share(function ($app) {
+        $app['rabbit.connection'] = ( function () use ($app) {
             if (!isset($app['rabbit.connections'])) {
                 throw new \InvalidArgumentException('You need to specify at least a connection in your configuration.');
             }
@@ -77,7 +78,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
     private function loadProducers($app)
     {
-        $app['rabbit.producer'] = $app->share(function ($app) {
+        $app['rabbit.producer'] = ( function () use ($app) {
             if (!isset($app['rabbit.producers'])) {
                 return;
             }
@@ -88,6 +89,9 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
                 $producer = new Producer($connection);
                 $producer->setExchangeOptions($options['exchange_options']);
+                if (array_key_exists('queue_options', $options)) {
+                    $producer->setQueueOptions($options['queue_options']);
+                }
 
                 //this producer doesn't define a queue
                 if (!isset($options['queue_options'])) {
@@ -101,14 +105,13 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
                 $producers[$name] = $producer;
             }
-
             return $producers;
         });
     }
 
     private function loadConsumers($app)
     {
-        $app['rabbit.consumer'] = $app->share(function ($app) {
+        $app['rabbit.consumer'] = ( function () use ($app) {
             if (!isset($app['rabbit.consumers'])) {
                 return;
             }
@@ -146,7 +149,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
     private function loadAnonymousConsumers($app)
     {
-        $app['rabbit.anonymous_consumer'] = $app->share(function ($app) {
+        $app['rabbit.anonymous_consumer'] = ( function () use ($app) {
             if (!isset($app['rabbit.anon_consumers'])) {
                 return;
             }
@@ -167,7 +170,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
     private function loadMultipleConsumers($app)
     {
-        $app['rabbit.multiple_consumer'] = $app->share(function ($app) {
+        $app['rabbit.multiple_consumer'] = ( function () use ($app) {
             if (!isset($app['rabbit.multiple_consumers'])) {
                 return;
             }
@@ -205,7 +208,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
     private function loadRpcClients($app)
     {
-        $app['rabbit.rpc_client'] = $app->share(function ($app) {
+        $app['rabbit.rpc_client'] = ( function () use ($app) {
             if (!isset($app['rabbit.rpc_clients'])) {
                 return;
             }
@@ -228,7 +231,7 @@ class RabbitServiceProvider implements ServiceProviderInterface
 
     private function loadRpcServers($app)
     {
-        $app['rabbit.rpc_server'] = $app->share(function ($app) {
+        $app['rabbit.rpc_server'] = ( function () use ($app) {
             if (!isset($app['rabbit.rpc_servers'])) {
                 return;
             }
